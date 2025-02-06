@@ -17,7 +17,6 @@
   - [Zoom](#monitoring-of-zoom)
 - [Performance Comparison](#performance-comparison)
 - [Conclusion](#conclusion)
-- [License](#license)
 - [Contact](#contact)
 
 ---
