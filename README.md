@@ -81,7 +81,7 @@ The following graphs are generated from the CSV data using a Jupyter Notebook (o
 
 ### Prerequisites
 
-- **Python 3.6+**
+- **Python 3.9+**
 - Required Python libraries:
   - `psutil`
   - `csv` (built-in)
