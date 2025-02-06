@@ -150,8 +150,8 @@ The objective of this research is to assess the effectiveness of online educatio
 
 ---
 ### Comparison Graphs
-![Comparison of Meeting Applications' Resource Consumption](graphs/Cpu Comparision.png)
-![Comparison of Meeting Applications' Resource Consumption](graphs/Ram number of thread comparision.png)
+![Comparison of Meeting Applications' Resource Consumption](graphs/Cpu20%Cp20Comparision.png)
+![Comparison of Meeting Applications' Resource Consumption](graphs/Ram%20number%20of%20thread%20comparision.png)
 
 ## Conclusion
 
