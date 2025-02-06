@@ -158,17 +158,10 @@ The objective of this research is to assess the effectiveness of online educatio
 
 ---
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
----
-
 ## Contact
 
 For any questions or feedback, please contact:
 
-- **Your Name**
-- **Email:** your.email@example.com
-- **LinkedIn:** [Your LinkedIn](https://linkedin.com/in/yourprofile)
+- **Your Name: Muhammad Anwaar**
+- **LinkedIn:** [Your LinkedIn](https://www.linkedin.com/in/muhammad-anwaar-7a1221214)
 
