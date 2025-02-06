@@ -1,122 +1,273 @@
-# MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
+MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
 
-**MeetMetrics** is a research project that compares the computational resource usage of various online meeting applications—including Voov, Skype, Zoom, and TeamViewer—to determine their efficiency in real-time communication scenarios. The goal is to provide actionable insights into which application is best suited for environments with limited computational resources, such as those used in online education.
+MeetMetrics is a research project that compares the computational and network resource usage of various online meeting applications—including TeamViewer, Skype, VooV, and Zoom—to determine their efficiency in real-time communication and online educational environments. This project provides insights for selecting the best tool for users with limited computational power.
 
----
+Table of Contents
 
-## Table of Contents
+Problem Statement
 
-- [Problem Statement](#problem-statement)
-- [Solution](#solution)
-- [Code Overview](#code-overview)
-- [Research Criteria](#research-criteria)
-- [Research Method](#research-method)
-- [Monitoring Details](#monitoring-details)
-  - [TeamViewer](#monitoring-of-teamviewer)
-  - [Skype](#monitoring-of-skype)
-  - [VooV](#monitoring-of-voov)
-  - [Zoom](#monitoring-of-zoom)
-- [Performance Comparison](#performance-comparison)
-- [Conclusion](#conclusion)
-- [License](#license)
-- [Contact](#contact)
+Solution
 
----
+Code Overview
 
-## Problem Statement
+Research Criteria
 
-One of the primary challenges in our research is that each meeting application (Voov, Skype, Zoom, TeamViewer) executes multiple processes during its runtime. To accurately measure the resource usage of these applications, it is essential to identify **every process** spawned by the software and monitor them individually. Without process-level granularity, the total resource consumption cannot be precisely determined.
+Research Method
 
----
+Monitoring Details
 
-## Solution
+TeamViewer
 
-To address this challenge, we developed a Python script that monitors system resources on a per-process basis. Since each meeting application uses a specific process name for all its processes, the solution involves filtering processes by their name and tracking resource metrics such as CPU usage, memory consumption, and the number of threads.
+Skype
 
----
+VooV
 
-## Code Overview
+Zoom
 
-The following Python code demonstrates how we monitor CPU and RAM usage for a given meeting application (in this example, *Zoom*). The script uses the `psutil` library to retrieve process information, the `csv` module to log data, and the `time` module to control the sampling interval.
+Performance Comparison
 
-### Code Explanation
+Conclusion
 
-1. **Library Imports:**
-   - **psutil:** Retrieves data on active processes and system utilization (CPU, RAM, etc.).
-   - **csv:** Reads and writes tabular data in CSV format.
-   - **time:** Manages delays and time-based operations during code execution.
+License
 
-2. **Continuous Monitoring:**
-   - An infinite loop (`while True:`) repeatedly scans for processes that match a specified name (e.g., `"Zoom"`).
-   - The script gathers process IDs, names, statuses, CPU usage (normalized by the number of CPU cores), thread counts, and memory usage.
+Contact
 
-3. **Data Logging:**
-   - The collected data is appended to a CSV file (`cpuzoom.csv`) for later analysis.
-   - The code uses a slight delay between measurements to ensure accurate CPU usage calculation.
+Problem Statement
 
-### The Code
+One of the challenges in assessing meeting applications is that each application (Voov, Skype, Zoom, TeamViewer) runs multiple processes during execution. To accurately measure resource usage, it is necessary to identify and monitor each process spawned by the software. Without this process-level granularity, the cumulative resource consumption cannot be properly determined.
 
-```python
-# Import the required libraries
-import psutil
-import time
-import csv
+Solution
 
-# Initialize iteration counter and CSV header fields
-x_value = 0
-fields = ['x_value', 'ProcessID', 'ProcessNAME', 'ProcessSTATUS', 'ProcessCPU', 'ProcessNUM_THREADS', 'Process_MEMORY(MB)']
+To address this challenge, a Python script was developed that monitors system resources on a per-process basis. Each meeting application uses a specific process name for all of its processes. By filtering processes by name, the script tracks resource metrics such as CPU usage, memory consumption, and the number of threads, and logs the data into CSV files for later analysis.
 
-# Continuous monitoring loop
-while True:
-    Proc_name = 'Zoom'  # Change this string to monitor a different meeting application
-    proc_list = []
+Research Criteria
 
-    # Iterate over running processes and filter by the target application name
-    for process in psutil.process_iter():
-        try:
-            if Proc_name in process.name():
-                proc = psutil.Process(process.pid)
-                # Activate cpu_percent() (first call returns 0.0)
-                proc.cpu_percent()
-                proc_list.append(proc)
-        except psutil.NoSuchProcess:
-            pass
+The objective of this research is to assess the effectiveness of online educational tools by comparing their computational and network resource usage. The research criteria include:
 
-    # Dictionary to hold CPU usage per process (normalized per CPU core)
-    resource_usage = {}
-    time.sleep(0.1)  # Short delay for accurate measurement
+Computational Resources: CPU usage, memory consumption, and the number of threads per process.
 
-    for proc in proc_list:
-        resource_usage[proc] = proc.cpu_percent() / psutil.cpu_count()
+Network Usage: Although not detailed in this code snippet, network metrics can also be incorporated for a more comprehensive analysis.
 
-    # Sort processes by CPU usage and select the top 200
-    sorted_usage = sorted(resource_usage.items(), key=lambda x: x[1])[-200:]
-    sorted_usage.reverse()
+Research Method
 
-    # Fetch detailed metrics and store in Table1
-    Table1 = []
-    for proc, cpu_percent in sorted_usage:
-        try:
-            with proc.oneshot():
-                Table1.append([
-                    x_value,
-                    str(proc.pid),
-                    proc.name(),
-                    proc.status(),
-                    f'{cpu_percent:.2f}%',
-                    proc.num_threads(),
-                    f'{proc.memory_info().rss / 1e6:.3f}'
-                ])
-        except psutil.NoSuchProcess:
-            pass
+Preparation
 
-    # Print collected data to console
-    print(Table1)
+Launch the Target Software:
 
-    # Append data to a CSV file for later analysis
-    with open('cpuzoom.csv', 'a', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerows(Table1)
+Start the meeting application (e.g., TeamViewer, Skype, VooV, Zoom).
 
-    x_value += 1
-    time.sleep(1)  # 1-second delay before next iteration
+Identify the Process Name:
+
+Open Task Manager and note the process name used by the software.
+
+Configuration
+
+Update the Python Script:
+
+Set process_name='[Process Name]' in the script to target the specific software.
+
+Data Collection
+
+Start Monitoring:
+
+Run the Python monitoring script and use the application normally to create typical load conditions.
+
+The script continuously records resource usage data into CSV files.
+
+Session Management
+
+Conduct Sessions:
+
+Run sessions that include both periods of inactivity and periods of high activity (e.g., enabling background blur, remote access).
+
+Stop the Session:
+
+Close the software and stop the script once the session is complete.
+
+Analysis
+
+Analyze Data:
+
+Analyze the CSV files to determine total, average, and peak resource usage.
+
+Generate Visuals:
+
+Create comparison tables and graphs to visualize performance across different applications.
+
+Monitoring Details
+
+Monitoring of TeamViewer
+
+Process Name: TeamViewer
+
+Procedure:
+
+Open Task Manager and note that all processes run under the name TeamViewer.
+
+Update the Python script with Proc_name = 'TeamViewer'.
+
+Run a session that includes both idle and active periods.
+
+Collect the CSV data for analysis.
+
+Result Sample:
+
+Row Labels
+
+Sum of CPU
+
+Sum of MEMORY (MB)
+
+Sum of NUM THREADS
+
+Example
+
+120.6122
+
+82466
+
+299606.446
+
+Grand Total
+
+120.6122
+
+82466
+
+299606.446
+
+Monitoring of Skype
+
+Process Name: skype
+
+Procedure:
+
+Note that all Skype processes run under the name skype.
+
+Update the script with Proc_name = 'skype'.
+
+Run the Skype session (including activation of features like background blur).
+
+Collect and analyze the CSV data.
+
+Result Sample:
+
+Row Labels
+
+Sum of CPU
+
+Sum of NUM THREADS
+
+Sum of MEMORY (MB)
+
+1028
+
+0.5418
+
+12840
+
+68706.271
+
+Grand Total
+
+105.111
+
+70945
+
+477740.786
+
+Monitoring of VooV
+
+Process Name: voov
+
+Procedure:
+
+Identify that all VooV processes share the name voov.
+
+Configure the script with Proc_name = 'voov'.
+
+Conduct the monitoring session (including feature activation such as background blur).
+
+Stop the session and collect the CSV data.
+
+Result Sample:
+
+Row Labels
+
+Sum of CPU
+
+Sum of NUM THREADS
+
+Sum of MEMORY (MB)
+
+Grand Total
+
+99.1768
+
+50684
+
+118616.756
+
+Performance Comparison
+
+Name
+
+Sum of CPU
+
+Sum of NUM THREADS
+
+Sum of MEMORY (MB)
+
+TeamViewer
+
+120.6122
+
+299606.446
+
+82466
+
+Skype
+
+105.111
+
+70945
+
+477740.786
+
+VooV
+
+99.1768
+
+50684
+
+118616.756
+
+Zoom
+
+15.8164
+
+53223
+
+118559.808
+
+Conclusion
+
+Zoom demonstrates the lowest resource consumption, making it the best option for students or users with limited computational power.
+
+VooV is the second most efficient option.
+
+TeamViewer and Skype have higher resource usage, suggesting that they may be less optimal for environments where hardware resources are constrained.
+
+License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+Contact
+
+For any questions or feedback, please contact:
+
+Your Name
+
+Email: your.email@example.com
+
+LinkedIn: Your LinkedIn
