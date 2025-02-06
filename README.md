@@ -1,273 +1,174 @@
-MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
+# MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
 
-MeetMetrics is a research project that compares the computational and network resource usage of various online meeting applications—including TeamViewer, Skype, VooV, and Zoom—to determine their efficiency in real-time communication and online educational environments. This project provides insights for selecting the best tool for users with limited computational power.
+![MeetMetrics](https://your-image-link-here.com)
 
-Table of Contents
+**MeetMetrics** is a research project that compares the computational and network resource usage of various online meeting applications—including TeamViewer, Skype, VooV, and Zoom—to determine their efficiency in real-time communication and online educational environments. This project provides insights for selecting the best tool for users with limited computational power.
 
-Problem Statement
+---
 
-Solution
+## Table of Contents
 
-Code Overview
+- [Problem Statement](#problem-statement)
+- [Solution](#solution)
+- [Code Overview](#code-overview)
+- [Research Criteria](#research-criteria)
+- [Research Method](#research-method)
+- [Monitoring Details](#monitoring-details)
+  - [TeamViewer](#monitoring-of-teamviewer)
+  - [Skype](#monitoring-of-skype)
+  - [VooV](#monitoring-of-voov)
+  - [Zoom](#monitoring-of-zoom)
+- [Performance Comparison](#performance-comparison)
+- [Conclusion](#conclusion)
+- [License](#license)
+- [Contact](#contact)
 
-Research Criteria
+---
 
-Research Method
-
-Monitoring Details
-
-TeamViewer
-
-Skype
-
-VooV
-
-Zoom
-
-Performance Comparison
-
-Conclusion
-
-License
-
-Contact
-
-Problem Statement
+## Problem Statement
 
 One of the challenges in assessing meeting applications is that each application (Voov, Skype, Zoom, TeamViewer) runs multiple processes during execution. To accurately measure resource usage, it is necessary to identify and monitor each process spawned by the software. Without this process-level granularity, the cumulative resource consumption cannot be properly determined.
 
-Solution
+---
+
+## Solution
 
 To address this challenge, a Python script was developed that monitors system resources on a per-process basis. Each meeting application uses a specific process name for all of its processes. By filtering processes by name, the script tracks resource metrics such as CPU usage, memory consumption, and the number of threads, and logs the data into CSV files for later analysis.
 
-Research Criteria
+---
+
+## Research Criteria
 
 The objective of this research is to assess the effectiveness of online educational tools by comparing their computational and network resource usage. The research criteria include:
 
-Computational Resources: CPU usage, memory consumption, and the number of threads per process.
+- **Computational Resources:** CPU usage, memory consumption, and the number of threads per process.
+- **Network Usage:** Although not detailed in this code snippet, network metrics can also be incorporated for a more comprehensive analysis.
 
-Network Usage: Although not detailed in this code snippet, network metrics can also be incorporated for a more comprehensive analysis.
+---
 
-Research Method
+## Research Method
 
-Preparation
+### Preparation
 
-Launch the Target Software:
+1. **Launch the Target Software:**
+   - Start the meeting application (e.g., TeamViewer, Skype, VooV, Zoom).
+2. **Identify the Process Name:**
+   - Open Task Manager and note the process name used by the software.
 
-Start the meeting application (e.g., TeamViewer, Skype, VooV, Zoom).
+### Configuration
 
-Identify the Process Name:
+1. **Update the Python Script:**
+   - Set `process_name='[Process Name]'` in the script to target the specific software.
 
-Open Task Manager and note the process name used by the software.
+### Data Collection
 
-Configuration
+1. **Start Monitoring:**
+   - Run the Python monitoring script and use the application normally to create typical load conditions.
+   - The script continuously records resource usage data into CSV files.
 
-Update the Python Script:
+### Session Management
 
-Set process_name='[Process Name]' in the script to target the specific software.
+1. **Conduct Sessions:**
+   - Run sessions that include both periods of inactivity and periods of high activity (e.g., enabling background blur, remote access).
+2. **Stop the Session:**
+   - Close the software and stop the script once the session is complete.
 
-Data Collection
+### Analysis
 
-Start Monitoring:
+1. **Analyze Data:**
+   - Analyze the CSV files to determine total, average, and peak resource usage.
+2. **Generate Visuals:**
+   - Create comparison tables and graphs to visualize performance across different applications.
 
-Run the Python monitoring script and use the application normally to create typical load conditions.
+---
 
-The script continuously records resource usage data into CSV files.
+## Monitoring Details
 
-Session Management
+### Monitoring of TeamViewer
 
-Conduct Sessions:
+- **Process Name:** `TeamViewer`
+- **Procedure:**
+  1. Open Task Manager and note that all processes run under the name `TeamViewer`.
+  2. Update the Python script with `Proc_name = 'TeamViewer'`.
+  3. Run a session that includes both idle and active periods.
+  4. Collect the CSV data for analysis.
 
-Run sessions that include both periods of inactivity and periods of high activity (e.g., enabling background blur, remote access).
+**Result Sample:**
 
-Stop the Session:
+```plaintext
+| Row Labels | Sum of CPU | Sum of MEMORY (MB) | Sum of NUM THREADS |
+|------------|-----------|---------------------|----------------------|
+| Example    | 120.6122  | 82466               | 299606.446          |
+| Grand Total | 120.6122 | 82466               | 299606.446          |
+```
 
-Close the software and stop the script once the session is complete.
+### Monitoring of Skype
 
-Analysis
+- **Process Name:** `skype`
+- **Procedure:**
+  1. Note that all Skype processes run under the name `skype`.
+  2. Update the script with `Proc_name = 'skype'`.
+  3. Run the Skype session (including activation of features like background blur).
+  4. Collect and analyze the CSV data.
 
-Analyze Data:
+**Result Sample:**
 
-Analyze the CSV files to determine total, average, and peak resource usage.
+```plaintext
+| Row Labels | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
+|------------|-----------|---------------------|---------------------|
+| 1028       | 0.5418    | 12840               | 68706.271           |
+| Grand Total | 105.111  | 70945               | 477740.786          |
+```
 
-Generate Visuals:
+### Monitoring of VooV
 
-Create comparison tables and graphs to visualize performance across different applications.
+- **Process Name:** `voov`
+- **Procedure:**
+  1. Identify that all VooV processes share the name `voov`.
+  2. Configure the script with `Proc_name = 'voov'`.
+  3. Conduct the monitoring session (including feature activation such as background blur).
+  4. Stop the session and collect the CSV data.
 
-Monitoring Details
+**Result Sample:**
 
-Monitoring of TeamViewer
+```plaintext
+| Row Labels | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
+|------------|-----------|---------------------|---------------------|
+| Grand Total | 99.1768  | 50684               | 118616.756          |
+```
 
-Process Name: TeamViewer
+### Performance Comparison
 
-Procedure:
+```plaintext
+| Name        | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
+|------------|-----------|---------------------|---------------------|
+| TeamViewer | 120.6122  | 299606.446          | 82466               |
+| Skype      | 105.111   | 70945               | 477740.786          |
+| VooV       | 99.1768   | 50684               | 118616.756          |
+| Zoom       | 15.8164   | 53223               | 118559.808          |
+```
 
-Open Task Manager and note that all processes run under the name TeamViewer.
+---
 
-Update the Python script with Proc_name = 'TeamViewer'.
+## Conclusion
 
-Run a session that includes both idle and active periods.
+- **Zoom** demonstrates the lowest resource consumption, making it the best option for students or users with limited computational power.
+- **VooV** is the second most efficient option.
+- **TeamViewer** and **Skype** have higher resource usage, suggesting that they may be less optimal for environments where hardware resources are constrained.
 
-Collect the CSV data for analysis.
+---
 
-Result Sample:
-
-Row Labels
-
-Sum of CPU
-
-Sum of MEMORY (MB)
-
-Sum of NUM THREADS
-
-Example
-
-120.6122
-
-82466
-
-299606.446
-
-Grand Total
-
-120.6122
-
-82466
-
-299606.446
-
-Monitoring of Skype
-
-Process Name: skype
-
-Procedure:
-
-Note that all Skype processes run under the name skype.
-
-Update the script with Proc_name = 'skype'.
-
-Run the Skype session (including activation of features like background blur).
-
-Collect and analyze the CSV data.
-
-Result Sample:
-
-Row Labels
-
-Sum of CPU
-
-Sum of NUM THREADS
-
-Sum of MEMORY (MB)
-
-1028
-
-0.5418
-
-12840
-
-68706.271
-
-Grand Total
-
-105.111
-
-70945
-
-477740.786
-
-Monitoring of VooV
-
-Process Name: voov
-
-Procedure:
-
-Identify that all VooV processes share the name voov.
-
-Configure the script with Proc_name = 'voov'.
-
-Conduct the monitoring session (including feature activation such as background blur).
-
-Stop the session and collect the CSV data.
-
-Result Sample:
-
-Row Labels
-
-Sum of CPU
-
-Sum of NUM THREADS
-
-Sum of MEMORY (MB)
-
-Grand Total
-
-99.1768
-
-50684
-
-118616.756
-
-Performance Comparison
-
-Name
-
-Sum of CPU
-
-Sum of NUM THREADS
-
-Sum of MEMORY (MB)
-
-TeamViewer
-
-120.6122
-
-299606.446
-
-82466
-
-Skype
-
-105.111
-
-70945
-
-477740.786
-
-VooV
-
-99.1768
-
-50684
-
-118616.756
-
-Zoom
-
-15.8164
-
-53223
-
-118559.808
-
-Conclusion
-
-Zoom demonstrates the lowest resource consumption, making it the best option for students or users with limited computational power.
-
-VooV is the second most efficient option.
-
-TeamViewer and Skype have higher resource usage, suggesting that they may be less optimal for environments where hardware resources are constrained.
-
-License
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-Contact
+---
+
+## Contact
 
 For any questions or feedback, please contact:
 
-Your Name
+- **Your Name**
+- **Email:** your.email@example.com
+- **LinkedIn:** [Your LinkedIn](https://linkedin.com/in/yourprofile)
 
-Email: your.email@example.com
-
-LinkedIn: Your LinkedIn
