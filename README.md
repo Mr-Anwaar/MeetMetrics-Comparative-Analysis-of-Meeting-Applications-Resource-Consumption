@@ -1,93 +1,122 @@
-# Comparative Analysis of Meeting Applications Based on Resource Usage
+# MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
 
-## Overview
+**MeetMetrics** is a research project that compares the computational resource usage of various online meeting applications—including Voov, Skype, Zoom, and TeamViewer—to determine their efficiency in real-time communication scenarios. The goal is to provide actionable insights into which application is best suited for environments with limited computational resources, such as those used in online education.
 
-This research project evaluates the computational resource consumption of various meeting applications (such as Zoom, Skype, and TeamViewer) to determine which one operates most efficiently during real-time communication sessions. The tool uses Python scripts to monitor system processes, capture CPU, memory, and thread data, and log the information into CSV files for further analysis.
-
-The repository includes:
-- The Python monitoring script.
-- Sample CSV output data.
-- Jupyter notebooks (or additional scripts) to generate comparison tables and graphs.
-- Documentation of the experimental setup and methodology.
+---
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Methodology](#methodology)
-- [Comparison Table and Graphs](#comparison-table-and-graphs)
-- [Installation and Usage](#installation-and-usage)
-- [Results](#results)
-- [Future Work](#future-work)
+- [Problem Statement](#problem-statement)
+- [Solution](#solution)
+- [Code Overview](#code-overview)
+- [Research Criteria](#research-criteria)
+- [Research Method](#research-method)
+- [Monitoring Details](#monitoring-details)
+  - [TeamViewer](#monitoring-of-teamviewer)
+  - [Skype](#monitoring-of-skype)
+  - [VooV](#monitoring-of-voov)
+  - [Zoom](#monitoring-of-zoom)
+- [Performance Comparison](#performance-comparison)
+- [Conclusion](#conclusion)
 - [License](#license)
 - [Contact](#contact)
 
-## Features
+---
 
-- **Real-Time Monitoring:** Continuously monitors CPU, memory, thread count, and process status of targeted meeting applications.
-- **Process Filtering:** Easily filter and select different meeting applications (e.g., Zoom, Skype) by changing a configuration variable.
-- **Data Logging:** Writes performance metrics to a CSV file (`cpuzoom.csv`) for detailed analysis.
-- **Efficient Data Retrieval:** Utilizes the `psutil` library’s `oneshot()` method to reduce the overhead of multiple system calls.
-- **Comparative Analysis:** Enables comparison of total, average, and peak resource usage across multiple meeting applications.
+## Problem Statement
 
-## Methodology
+One of the primary challenges in our research is that each meeting application (Voov, Skype, Zoom, TeamViewer) executes multiple processes during its runtime. To accurately measure the resource usage of these applications, it is essential to identify **every process** spawned by the software and monitor them individually. Without process-level granularity, the total resource consumption cannot be precisely determined.
 
-1. **Toolset and Libraries:**
-   - **Python:** Primary language for scripting and data collection.
-   - **psutil:** For retrieving system and process information.
-   - **csv:** For writing the captured data in CSV format.
-   - **time:** For controlling sampling intervals.
+---
 
-2. **Data Collection:**
-   - The script runs an infinite loop that continuously samples the resource usage of processes filtered by application name.
-   - Each iteration collects metrics such as Process ID, Process Name, Process Status, CPU usage (normalized per CPU core), number of threads, and memory usage in MB.
-   - The collected data is appended to a CSV file for post-session analysis.
+## Solution
 
-3. **Experiment Setup:**
-   - **Idle Session:** Applications are launched and left idle.
-   - **Active Session:** Applications are used actively (e.g., initiating video calls, using background effects) to simulate real-world usage.
-   - Data from both sessions are analyzed to compare the efficiency of different meeting applications.
+To address this challenge, we developed a Python script that monitors system resources on a per-process basis. Since each meeting application uses a specific process name for all its processes, the solution involves filtering processes by their name and tracking resource metrics such as CPU usage, memory consumption, and the number of threads.
 
-## Comparison Table and Graphs
+---
 
-### Comparison Table
+## Code Overview
 
-After data collection, the following key metrics are computed and tabulated for each application:
+The following Python code demonstrates how we monitor CPU and RAM usage for a given meeting application (in this example, *Zoom*). The script uses the `psutil` library to retrieve process information, the `csv` module to log data, and the `time` module to control the sampling interval.
 
-| **Process ID** | **Process Name**       | **Total CPU Usage (%)** | **Average CPU Usage (%)** | **Peak CPU Usage (%)** | **Total Memory (MB)** | **Total Threads** |
-|----------------|------------------------|-------------------------|---------------------------|------------------------|-----------------------|-------------------|
-| 2692           | Zoom.exe               | 104.57                  | 17.22                     | 99.13                  | 401500.33             | 12840             |
-| 1028           | SkypeBridge.exe        | 0.54                    | 0.54                      | 0.54                   | 68706.27              | 12840             |
-| ...            | ...                    | ...                     | ...                       | ...                    | ...                   | ...               |
+### Code Explanation
 
-*Note:* The above values are sample data from a test session. Actual values may vary based on system configuration and session activity.
+1. **Library Imports:**
+   - **psutil:** Retrieves data on active processes and system utilization (CPU, RAM, etc.).
+   - **csv:** Reads and writes tabular data in CSV format.
+   - **time:** Manages delays and time-based operations during code execution.
 
-### Graphs
+2. **Continuous Monitoring:**
+   - An infinite loop (`while True:`) repeatedly scans for processes that match a specified name (e.g., `"Zoom"`).
+   - The script gathers process IDs, names, statuses, CPU usage (normalized by the number of CPU cores), thread counts, and memory usage.
 
-The following graphs are generated from the CSV data using a Jupyter Notebook (or your preferred data visualization tool):
+3. **Data Logging:**
+   - The collected data is appended to a CSV file (`cpuzoom.csv`) for later analysis.
+   - The code uses a slight delay between measurements to ensure accurate CPU usage calculation.
 
-- **Total Resource Consumption Graph:**  
-  This bar graph displays the cumulative CPU and memory usage per process. It clearly shows which primary processes (like `Zoom.exe` or `SkypeApp.exe`) are the most resource-intensive.
-  
-- **Average Resource Usage Chart:**  
-  This line or bar chart highlights the average CPU usage of each process during the session, offering insights into the baseline resource requirements.
-  
-- **Peak Resource Usage Plot:**  
-  A scatter or line plot illustrates the maximum CPU and memory usage recorded for each process, indicating the load experienced during intensive usage.
+### The Code
 
-*Graph examples and notebooks can be found in the `/analysis` folder of this repository.*
+```python
+# Import the required libraries
+import psutil
+import time
+import csv
 
-## Installation and Usage
+# Initialize iteration counter and CSV header fields
+x_value = 0
+fields = ['x_value', 'ProcessID', 'ProcessNAME', 'ProcessSTATUS', 'ProcessCPU', 'ProcessNUM_THREADS', 'Process_MEMORY(MB)']
 
-### Prerequisites
+# Continuous monitoring loop
+while True:
+    Proc_name = 'Zoom'  # Change this string to monitor a different meeting application
+    proc_list = []
 
-- **Python 3.9+**
-- Required Python libraries:
-  - `psutil`
-  - `csv` (built-in)
-  - `time` (built-in)
+    # Iterate over running processes and filter by the target application name
+    for process in psutil.process_iter():
+        try:
+            if Proc_name in process.name():
+                proc = psutil.Process(process.pid)
+                # Activate cpu_percent() (first call returns 0.0)
+                proc.cpu_percent()
+                proc_list.append(proc)
+        except psutil.NoSuchProcess:
+            pass
 
-You can install `psutil` using pip:
+    # Dictionary to hold CPU usage per process (normalized per CPU core)
+    resource_usage = {}
+    time.sleep(0.1)  # Short delay for accurate measurement
 
-```bash
-pip install psutil
+    for proc in proc_list:
+        resource_usage[proc] = proc.cpu_percent() / psutil.cpu_count()
+
+    # Sort processes by CPU usage and select the top 200
+    sorted_usage = sorted(resource_usage.items(), key=lambda x: x[1])[-200:]
+    sorted_usage.reverse()
+
+    # Fetch detailed metrics and store in Table1
+    Table1 = []
+    for proc, cpu_percent in sorted_usage:
+        try:
+            with proc.oneshot():
+                Table1.append([
+                    x_value,
+                    str(proc.pid),
+                    proc.name(),
+                    proc.status(),
+                    f'{cpu_percent:.2f}%',
+                    proc.num_threads(),
+                    f'{proc.memory_info().rss / 1e6:.3f}'
+                ])
+        except psutil.NoSuchProcess:
+            pass
+
+    # Print collected data to console
+    print(Table1)
+
+    # Append data to a CSV file for later analysis
+    with open('cpuzoom.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(Table1)
+
+    x_value += 1
+    time.sleep(1)  # 1-second delay before next iteration
