@@ -1,7 +1,4 @@
 # MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
-
-![MeetMetrics](https://your-image-link-here.com)
-
 **MeetMetrics** is a research project that compares the computational and network resource usage of various online meeting applications—including TeamViewer, Skype, VooV, and Zoom—to determine their efficiency in real-time communication and online educational environments. This project provides insights for selecting the best tool for users with limited computational power.
 
 ---
