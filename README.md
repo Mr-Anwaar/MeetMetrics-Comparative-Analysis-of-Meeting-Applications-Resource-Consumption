@@ -149,6 +149,9 @@ The objective of this research is to assess the effectiveness of online educatio
 ```
 
 ---
+### Comparison Graphs
+![Comparison of Meeting Applications' Resource Consumption](graphs/meetmetrics_comparison.png)
+![Comparison of Meeting Applications' Resource Consumption](graphs/meetmetrics_comparison.png)
 
 ## Conclusion
 
