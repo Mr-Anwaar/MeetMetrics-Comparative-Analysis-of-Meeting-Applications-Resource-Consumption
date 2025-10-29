@@ -91,12 +91,12 @@ The objective of this research is to assess the effectiveness of online educatio
 
 **Result Sample:**
 
-```plaintext
+
 | Row Labels | Sum of CPU | Sum of MEMORY (MB) | Sum of NUM THREADS |
 |------------|-----------|---------------------|----------------------|
 | Example    | 120.6122  | 82466               | 299606.446          |
 | Grand Total | 120.6122 | 82466               | 299606.446          |
-```
+
 
 ### Monitoring of Skype
 
@@ -109,12 +109,12 @@ The objective of this research is to assess the effectiveness of online educatio
 
 **Result Sample:**
 
-```plaintext
+
 | Row Labels | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
 |------------|-----------|---------------------|---------------------|
 | 1028       | 0.5418    | 12840               | 68706.271           |
 | Grand Total | 105.111  | 70945               | 477740.786          |
-```
+
 
 ### Monitoring of VooV
 
@@ -127,22 +127,22 @@ The objective of this research is to assess the effectiveness of online educatio
 
 **Result Sample:**
 
-```plaintext
+
 | Row Labels | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
 |------------|-----------|---------------------|---------------------|
 | Grand Total | 99.1768  | 50684               | 118616.756          |
-```
+
 
 ### Performance Comparison
 
-```plaintext
+
 | Name        | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
 |------------|-----------|---------------------|---------------------|
 | TeamViewer | 120.6122  | 299606.446          | 82466               |
 | Skype      | 105.111   | 70945               | 477740.786          |
 | VooV       | 99.1768   | 50684               | 118616.756          |
 | Zoom       | 15.8164   | 53223               | 118559.808          |
-```
+
 
 ---
 ### Comparison Graphs
