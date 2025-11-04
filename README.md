@@ -1,159 +1,97 @@
 # MeetMetrics: Comparative Analysis of Meeting Applications' Resource Consumption
+
 **MeetMetrics** is a research project that compares the computational and network resource usage of various online meeting applications—including TeamViewer, Skype, VooV, and Zoom—to determine their efficiency in real-time communication and online educational environments. This project provides insights for selecting the best tool for users with limited computational power.
 
 ---
 
 ## Table of Contents
 
-- [Problem Statement](#problem-statement)
-- [Solution](#solution)
-- [Code Overview](#code-overview)
-- [Research Criteria](#research-criteria)
-- [Research Method](#research-method)
-- [Monitoring Details](#monitoring-details)
-  - [TeamViewer](#monitoring-of-teamviewer)
-  - [Skype](#monitoring-of-skype)
-  - [VooV](#monitoring-of-voov)
-  - [Zoom](#monitoring-of-zoom)
-- [Performance Comparison](#performance-comparison)
-- [Conclusion](#conclusion)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Monitoring an Application](#monitoring-an-application)
+  - [Visualizing the Data](#visualizing-the-data)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
 - [Contact](#contact)
 
 ---
 
-## Problem Statement
+## Getting Started
 
-One of the challenges in assessing meeting applications is that each application (Voov, Skype, Zoom, TeamViewer) runs multiple processes during execution. To accurately measure resource usage, it is necessary to identify and monitor each process spawned by the software. Without this process-level granularity, the cumulative resource consumption cannot be properly determined.
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
----
+### Prerequisites
 
-## Solution
+- Python 3.7+
+- pip (Python package installer)
 
-To address this challenge, a Python script was developed that monitors system resources on a per-process basis. Each meeting application uses a specific process name for all of its processes. By filtering processes by name, the script tracks resource metrics such as CPU usage, memory consumption, and the number of threads, and logs the data into CSV files for later analysis.
+### Installation
 
----
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Mr-Anwaar/MeetMetrics-Comparative-Analysis-of-Meeting-Applications-Resource-Consumption.git
+    cd MeetMetrics-Comparative-Analysis-of-Meeting-Applications-Resource-Consumption
+    ```
 
-## Research Criteria
-
-The objective of this research is to assess the effectiveness of online educational tools by comparing their computational and network resource usage. The research criteria include:
-
-- **Computational Resources:** CPU usage, memory consumption, and the number of threads per process.
-- **Network Usage:** Although not detailed in this code snippet, network metrics can also be incorporated for a more comprehensive analysis.
-
----
-
-## Research Method
-
-### Preparation
-
-1. **Launch the Target Software:**
-   - Start the meeting application (e.g., TeamViewer, Skype, VooV, Zoom).
-2. **Identify the Process Name:**
-   - Open Task Manager and note the process name used by the software.
-
-### Configuration
-
-1. **Update the Python Script:**
-   - Set `process_name='[Process Name]'` in the script to target the specific software.
-
-### Data Collection
-
-1. **Start Monitoring:**
-   - Run the Python monitoring script and use the application normally to create typical load conditions.
-   - The script continuously records resource usage data into CSV files.
-
-### Session Management
-
-1. **Conduct Sessions:**
-   - Run sessions that include both periods of inactivity and periods of high activity (e.g., enabling background blur, remote access).
-2. **Stop the Session:**
-   - Close the software and stop the script once the session is complete.
-
-### Analysis
-
-1. **Analyze Data:**
-   - Analyze the CSV files to determine total, average, and peak resource usage.
-2. **Generate Visuals:**
-   - Create comparison tables and graphs to visualize performance across different applications.
+2.  **Install the dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ---
 
-## Monitoring Details
+## Usage
 
-### Monitoring of TeamViewer
+This project provides two main scripts: `monitor.py` for collecting data and `visualize.py` for generating comparison graphs.
 
-- **Process Name:** `TeamViewer`
-- **Procedure:**
-  1. Open Task Manager and note that all processes run under the name `TeamViewer`.
-  2. Update the Python script with `Proc_name = 'TeamViewer'`.
-  3. Run a session that includes both idle and active periods.
-  4. Collect the CSV data for analysis.
+### Monitoring an Application
 
-**Result Sample:**
+The `monitor.py` script allows you to track the CPU, memory, and network usage of any application, even if it runs under multiple process names.
 
+1.  **Identify all process names** associated with the application you want to monitor. For example, Zoom runs processes under both `Zoom` and `zwebview`.
+2.  **Run the script** from your terminal, providing an output file path and a list of all process names to monitor:
+    ```bash
+    python monitor.py <output_file.csv> <process_name_1> <process_name_2> ...
+    ```
+    For example, to accurately monitor Zoom, you should track both of its main processes like this:
+    ```bash
+    python monitor.py zoom_data.csv Zoom zwebview
+    ```
+3.  **Let the script run** while you use the application. Press `Ctrl+C` to stop monitoring.
 
-| Row Labels | Sum of CPU | Sum of MEMORY (MB) | Sum of NUM THREADS |
-|------------|-----------|---------------------|----------------------|
-| Example    | 120.6122  | 82466               | 299606.446          |
-| Grand Total | 120.6122 | 82466               | 299606.446          |
+### Visualizing the Data
 
+Once you have collected data for multiple applications, you can use the `visualize.py` script to generate comparison graphs.
 
-### Monitoring of Skype
-
-- **Process Name:** `skype`
-- **Procedure:**
-  1. Note that all Skype processes run under the name `skype`.
-  2. Update the script with `Proc_name = 'skype'`.
-  3. Run the Skype session (including activation of features like background blur).
-  4. Collect and analyze the CSV data.
-
-**Result Sample:**
-
-
-| Row Labels | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
-|------------|-----------|---------------------|---------------------|
-| 1028       | 0.5418    | 12840               | 68706.271           |
-| Grand Total | 105.111  | 70945               | 477740.786          |
-
-
-### Monitoring of VooV
-
-- **Process Name:** `voov`
-- **Procedure:**
-  1. Identify that all VooV processes share the name `voov`.
-  2. Configure the script with `Proc_name = 'voov'`.
-  3. Conduct the monitoring session (including feature activation such as background blur).
-  4. Stop the session and collect the CSV data.
-
-**Result Sample:**
-
-
-| Row Labels | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
-|------------|-----------|---------------------|---------------------|
-| Grand Total | 99.1768  | 50684               | 118616.756          |
-
-
-### Performance Comparison
-
-
-| Name        | Sum of CPU | Sum of NUM THREADS | Sum of MEMORY (MB) |
-|------------|-----------|---------------------|---------------------|
-| TeamViewer | 120.6122  | 299606.446          | 82466               |
-| Skype      | 105.111   | 70945               | 477740.786          |
-| VooV       | 99.1768   | 50684               | 118616.756          |
-| Zoom       | 15.8164   | 53223               | 118559.808          |
-
+1.  **Run the script** from your terminal, providing the paths to the CSV files you want to compare:
+    ```bash
+    python visualize.py <file1.csv> <file2.csv> ...
+    ```
+    For example, to compare the data from `zoom_data.csv` and `skype_data.csv`, you would run:
+    ```bash
+    python visualize.py zoom_data.csv skype_data.csv
+    ```
+2.  The script will generate bar charts comparing the average CPU usage, memory consumption, and number of threads for each application. The graphs will be saved in the `graphs` directory by default.
 
 ---
-### Comparison Graphs
-![Comparison of Meeting Applications' Resource Consumption](graphs/Cpu%20Comparision.png)
-![Comparison of Meeting Applications' Resource Consumption](graphs/Ram%20number%20of%20thread%20comparision.png)
 
-## Conclusion
+## Project Structure
 
-- **Zoom** demonstrates the lowest resource consumption, making it the best option for students or users with limited computational power.
-- **VooV** is the second most efficient option.
-- **TeamViewer** and **Skype** have higher resource usage, suggesting that they may be less optimal for environments where hardware resources are constrained.
+The project has the following structure:
+
+-   `monitor.py`: The main script for monitoring application resource usage.
+-   `visualize.py`: The script for generating comparison graphs from the collected data.
+-   `requirements.txt`: A file listing the project's dependencies.
+-   `graphs/`: The default directory where the output graphs are saved.
+-   `README.md`: This file.
+
+---
+
+## Contributing
+
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
 
 ---
 
@@ -161,6 +99,5 @@ The objective of this research is to assess the effectiveness of online educatio
 
 For any questions or feedback, please contact:
 
-- **Your Name: Muhammad Anwaar**
-- **LinkedIn:** [Your LinkedIn](https://www.linkedin.com/in/muhammad-anwaar-7a1221214)
-
+-   **Muhammad Anwaar**
+-   **LinkedIn:** [https://www.linkedin.com/in/muhammad-anwaar-7a1221214](https://www.linkedin.com/in/muhammad-anwaar-7a1221214)
